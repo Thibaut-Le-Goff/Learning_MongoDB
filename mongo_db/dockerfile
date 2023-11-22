@@ -29,11 +29,7 @@ CMD ["mongod"]
 # Commande pour exporter la basse de donnée au serveur (après avoir installer mongodb sur la machine hôte) :
 #
 
-<<<<<<< HEAD
-# mongoimport --host=172.17.0.2:27017 --db new_york --collection restaurants restaurants.json
-=======
 # mongoimport --host=172.17.0.2:27017 --db new_york --collection restaurants restaurants.json
 
 # "mongodb://172.17.0.2:27017"
 # gcc -o test test.c $(pkg-config --cflags --libs libmongoc-1.0) && ./test
->>>>>>> d0aa04d (	nouveau fichier : .gitignore)
