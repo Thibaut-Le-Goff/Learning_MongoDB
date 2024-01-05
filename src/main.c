@@ -1,17 +1,25 @@
 #include <bson/bson.h>
 #include <mongoc/mongoc.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netdb.h>
+
 #include <stdio.h>
 
-// gcc -o test test.c $(pkg-config --cflags --libs libmongoc-1.0) && ./test > test.txt
+#include "../include/partie_1/interrogez_mongodb.h"
 
+// gcc -o test test.c $(pkg-config --cflags --libs libmongoc-1.0) && ./test > test.txt
+/**/
 int main(void) {
+    int return_state = 0;
+
+    /*
+    // unused variable :
     bson_error_t error = {0};
     bson_t reply = BSON_INITIALIZER;
-
-    int return_state = 0;
     bool ok = true;
     int64_t count;
-
+    */
 
     // Initialize the MongoDB C Driver.
     mongoc_init();
@@ -33,37 +41,13 @@ int main(void) {
         goto cleanup_database;
     }
 
-    mongoc_collection_t *collection = mongoc_client_get_collection(client, "new_york", "restaurants");
 
-    bson_t *query = bson_new();
-    BSON_APPEND_UTF8(query, "borough", "Brooklyn");
-    BSON_APPEND_UTF8(query, "cuisine", "Italian");
-    BSON_APPEND_UTF8(query, "address.street", "5 Avenue");
+    // Interrogez vos données avec MongoDB
+    filtrage(client);
 
-    //const bson_value_t *value;
-    //value = bson_iter_value("/pizza/i");
-
-    //BSON_APPEND_VALUE(query, "name", value);
-    //BSON_APPEND_UTF8(query, "name", '/"pizza"/i');
-    //BSON_APPEND_VALUE(query, "name", '/"pizza"/i');
-    //BSON_APPEND_UTF8(query, "name", /"pizza"/i);
-
-    mongoc_cursor_t *cursor = mongoc_collection_find_with_opts(collection, query, NULL, NULL);
-
-    const bson_t *doc = NULL;
-    char *str;
-    while (mongoc_cursor_next (cursor, &doc)) {
-        str = bson_as_canonical_extended_json(doc, NULL);
-        printf("%s\n", str);
-        bson_free(str);
-    }
+    
 
     // Perform cleanup.
-    bson_free((char*)doc);
-    mongoc_collection_destroy(collection);
-    bson_destroy(query);
-    mongoc_cursor_destroy(cursor);
-
     cleanup_database:
         mongoc_database_destroy(database);
 
