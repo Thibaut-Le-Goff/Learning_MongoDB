@@ -9,17 +9,11 @@
 #include "../include/partie_1/interrogez_mongodb.h"
 
 // gcc -o test test.c $(pkg-config --cflags --libs libmongoc-1.0) && ./test > test.txt
+// mongoimport --host=172.17.0.2:27017 --db new_york --collection restaurants restaurants.json
+
 /**/
 int main(void) {
     int return_state = 0;
-
-    /*
-    // unused variable :
-    bson_error_t error = {0};
-    bson_t reply = BSON_INITIALIZER;
-    bool ok = true;
-    int64_t count;
-    */
 
     // Initialize the MongoDB C Driver.
     mongoc_init();
