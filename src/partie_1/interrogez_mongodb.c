@@ -24,13 +24,52 @@ void filtrage(mongoc_client_t *client) {
     BSON_APPEND_DOCUMENT(query, "name", regex);
     // "name" car le regex s'applique aux noms 
     */
-    bson_t *projection = BCON_NEW("cuisine", BCON_INT32(1));
+
+    /*
+    bson_t *filter;
+    bson_t *opts;
+    mongoc_read_prefs_t *read_prefs;
+    
+    filter = BCON_NEW ("foo", BCON_INT32 (1));
+
+    // Include "field_name_one" and "field_name_two" in "projection", omit
+    // others. "_id" must be specifically removed or it is included by default.
+    
+    opts = BCON_NEW ("projection", "{",
+                        "field_name_one", BCON_BOOL (true),
+                        "field_name_two", BCON_BOOL (true),
+                        "_id", BCON_BOOL (false),
+                    "}",
+                    "tailable", BCON_BOOL (true),
+                    "awaitData", BCON_BOOL (true),
+                    "sort", "{", "bar", BCON_INT32 (-1), "}",
+                    "collation", "{",
+                        "locale", BCON_UTF8("en_US"),
+                        "caseFirst", BCON_UTF8 ("lower"),
+                    "}");
+
+    read_prefs = mongoc_read_prefs_new (MONGOC_READ_SECONDARY);
+
+    cursor = mongoc_collection_find_with_opts (collection, filter, opts, read_prefs);
+    */
+    bson_t *filter;
+    bson_t *projection = BCON_NEW("name", BCON_INT32(1));
+    bson_t *opts = BCON_NEW("projection", BCON_DOCUMENT(projection));
+    
+    filter = BCON_NEW ("foo", BCON_INT32 (1));
+
+    // Include "field_name_one" and "field_name_two" in "projection", omit
+    // others. "_id" must be specifically removed or it is included by default.
 
     bson_t *query = BCON_NEW("borough", BCON_UTF8("Brooklyn"),
                             "cuisine", BCON_UTF8("Italian"),
                             "address.street", BCON_UTF8("5 Avenue"),
-                            "name", "{", "$regex", BCON_UTF8("pizza"), "$options", BCON_UTF8("i"), "}",
-                            "name", "{", "$exists", BCON_BOOL(true), "}");
+                            "name", "{", "$regex", BCON_UTF8("pizza"), "$options", BCON_UTF8("i"), "}");
+
+
+    //mongoc_read_prefs_t *read_prefs = mongoc_read_prefs_new (MONGOC_READ_SECONDARY);
+
+    mongoc_cursor_t *cursor = mongoc_collection_find_with_opts (collection, query, opts, NULL);
 
 
     //bson_t *projection = BCON_NEW("name", "{", "$exists", BCON_BOOL(true), "}");
@@ -40,7 +79,7 @@ void filtrage(mongoc_client_t *client) {
     //BSON_APPEND_INT32(projection, "name", 1);
 
     // interrogation de la BDD
-    mongoc_cursor_t *cursor = mongoc_collection_find_with_opts(collection, query, NULL, NULL);
+    //mongoc_cursor_t *cursor = mongoc_collection_find_with_opts(collection, query, NULL, NULL);
 
     const bson_t *doc = NULL;
     //char *str;
@@ -55,6 +94,8 @@ void filtrage(mongoc_client_t *client) {
     bson_destroy(query);
     //bson_destroy(regex);
     bson_destroy(projection);
+    bson_destroy(filter);
+    bson_destroy(opts);
     mongoc_cursor_destroy(cursor);
     bson_free((char*)doc);
 }
