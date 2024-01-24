@@ -3,19 +3,30 @@ FROM mongo:latest
 WORKDIR /data
 
 RUN apt-get update -y && \
-    apt-get clean 
-    #&& \
-    #useradd -ms /bin/bash user
-
-
-#USER user
-#WORKDIR /home/user
+    #mongo --eval 'db.createUser({user: "admin", pwd: passwordPrompt(), roles: ["root"], mechanisms: ["SCRAM-SHA-256"]})' --host localhost:27017 --username admin --password admin
+    apt-get install -y apache2-utils
 
 VOLUME ["/data/db"]
 
 EXPOSE 27017:27017
 
-CMD ["mongod"]
+
+#ENV MONGO_INITDB_ROOT_USERNAME=admin
+#ENV MONGO_INITDB_ROOT_PASSWORD=admin
+
+COPY ./users.js /docker-entrypoint-initdb.d/
+#ADD create_user.sh /data/create_user.sh
+#RUN chmod 755 /data/create_user.sh
+
+#RUN mongo --eval 'db.createUser({user: "admin", pwd: passwordPrompt(), roles: ["root"], mechanisms: ["SCRAM-SHA-256"]})' --host localhost:27017 --username admin --password admin
+#RUN echo "db.createUser({ user: 'admin', pwd: '${MONGODB_PASSWORD}', roles: [{ role: 'root', db: 'admin' }], mechanisms: ['SCRAM-SHA-256'], passwordDigestor: 'server' });" >> /docker-entrypoint-initdb.d/users.js
+
+#CMD ["./create_user.sh", "mot_de_sel_passe"]
+CMD ["mongod", "--auth"]
+
+#CMD ["mongod"] 
+
+# PENSER à LA TECNIQUE SEL + MDP !!!!!
 
 #
 # Commandes pour démarer le contenaire

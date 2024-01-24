@@ -28,7 +28,7 @@ int main(void) {
     }
 
     // Get a handle on the "admin" database.
-    mongoc_database_t *database = mongoc_client_get_database(client, "user");
+    mongoc_database_t *database = mongoc_client_get_database(client, "admin");
     if (!database) {
         fprintf(stderr, "Failed to get a MongoDB database handle.\n");
         return_state = 1;
@@ -37,7 +37,7 @@ int main(void) {
 
 
     // Interrogez vos données avec MongoDB
-    filtrage(client);
+    filtrage_et_projection(client);
 
     
 
