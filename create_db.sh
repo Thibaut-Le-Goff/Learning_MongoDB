@@ -1,7 +1,14 @@
 #!/bin/bash
 
 docker build -t mongo_server mongo_db
-docker run mongo_server
+docker run -e MONGO_INITDB_ROOT_USERNAME=admin \
+      -e MONGO_INITDB_ROOT_PASSWORD=mot_de_sel_passe \
+      mongo_server
 
-# l'importation des donnée ne marche pas via le script
-#mongoimport --host=172.17.0.2:27017 --db new_york --collection restaurants ../restaurants.json
+sleep 10
+
+mongoimport --host=172.17.0.2:27017 \
+            --db new_york --collection restaurants \
+            --username admin --password mot_de_sel_passe \
+            --authenticationDatabase admin \
+            --file ../restaurants.json

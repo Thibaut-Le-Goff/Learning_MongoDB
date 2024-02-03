@@ -21,8 +21,7 @@ void filtrage_et_projection(mongoc_client_t *client) {
                             // ...où il y a le mot "pizza" dans le nom...
     
     // ...voir uniquement...
-    bson_t *projection = BCON_NEW(
-                                "name", BCON_INT32(1),
+    bson_t *projection = BCON_NEW("name", BCON_INT32(1),
                                 // ...les noms des restaurants...
                                 "grades.score", BCON_INT32(1),
                                 // ...leurs notes...
@@ -33,17 +32,25 @@ void filtrage_et_projection(mongoc_client_t *client) {
     mongoc_cursor_t *cursor = mongoc_collection_find_with_opts (collection, query, opts, NULL);
 
     const bson_t *doc = NULL;
-    while (mongoc_cursor_next (cursor, &doc)) {
+    while (mongoc_cursor_next(cursor, &doc)) {
+        /*
+        if (doc != NULL) 
+        {
+            char *str = bson_as_canonical_extended_json(doc, NULL);
+            printf("%s\n", str);
+            bson_free(str);
+        }*/
+        
         char *str = bson_as_canonical_extended_json(doc, NULL);
         printf("%s\n", str);
         bson_free(str);
     }
     
     // nettoyage
+    mongoc_cursor_destroy(cursor);
+    bson_free((char*)doc);
     mongoc_collection_destroy(collection);
     bson_destroy(query);
     bson_destroy(projection);
     bson_destroy(opts);
-    mongoc_cursor_destroy(cursor);
-    bson_free((char*)doc);
 }

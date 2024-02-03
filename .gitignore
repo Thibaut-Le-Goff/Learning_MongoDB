@@ -1,4 +1,5 @@
 /restaurants.json
 /bin
-/logs
+/logs/errors/*.txt
+/logs/outputs/*.txt
 

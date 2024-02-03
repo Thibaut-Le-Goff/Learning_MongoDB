@@ -14,7 +14,7 @@ EXPOSE 27017:27017
 #ENV MONGO_INITDB_ROOT_USERNAME=admin
 #ENV MONGO_INITDB_ROOT_PASSWORD=admin
 
-COPY ./users.js /docker-entrypoint-initdb.d/
+#COPY ./users.js /docker-entrypoint-initdb.d/
 #ADD create_user.sh /data/create_user.sh
 #RUN chmod 755 /data/create_user.sh
 

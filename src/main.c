@@ -12,14 +12,16 @@
 // mongoimport --host=172.17.0.2:27017 --db new_york --collection restaurants restaurants.json
 
 /**/
-int main(void) {
+int main() {
     int return_state = 0;
 
     // Initialize the MongoDB C Driver.
     mongoc_init();
 
     //client = mongoc_client_new("mongodb://127.0.0.1:27017");
-    mongoc_client_t *client = mongoc_client_new("mongodb://172.17.0.2:27017");
+    //mongoc_client_t *client = mongoc_client_new("mongodb://172.17.0.2:27017");
+    mongoc_client_t *client =  mongoc_client_new ("mongodb://admin:mot_de_sel_passe@172.17.0.2:27017/?authSource=admin");
+    
     if (!client) {
         fprintf(stderr, "Failed to create a MongoDB client.\n");
 
@@ -82,4 +84,12 @@ int main(void) {
     "name": "Cocktail Bodega", 
     "restaurant_id": "50010278"
 }
+
+    list:             Show the source code.
+    print <variable>: Print the value of a variable.
+    backtrace or bt:  Display a backtrace of the call stack.
+    step or s:        Execute a single instruction, stepping into function calls.
+    next or n:        Execute a single instruction, stepping over function calls.
+    continue or c:    Continue running until the next breakpoint.
+
 */
