@@ -1,4 +1,4 @@
-FROM mongo-cxx-driver:latest
+FROM mongodb/mongo-cxx-driver:latest
 
 WORKDIR /build
 
@@ -7,13 +7,14 @@ RUN microdnf upgrade -y && \
     microdnf install -y git && \
     git clone https://github.com/Thibaut-Le-Goff/Vim_Config && \
     chmod +x Vim_Config/install_vim_config.sh && \
-    ./install_vim_config.sh 
+    ./Vim_Config/install_vim_config.sh 
 # && \    git clone https://github.com/Thibaut-Le-Goff/Learning_MongoDB
 
-ADD ../src /build/src
-ADD ../src /build/include
+ADD /src /build/src
+ADD /src /build/include
  
-ADD .../run.sh /build/run.sh
+ADD /makefile /build/makefile
+ADD /run.sh /build/run.sh
 
 RUN chmod +x run.sh
 

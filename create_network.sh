@@ -4,16 +4,18 @@ docker network create --subnet 172.50.0.0/16 POC_MongoDB
 
 
 # for the server
+docker pull mongo
+
 docker build -t mongo_server mongo_db
 
 docker run --net POC_MongoDB \
             --ip 172.50.0.2 \
             --cap-add=NET_ADMIN \
-            -it --name sever \
+            --name sever \
             --hostname POC_MongoDB \
             -e MONGO_INITDB_ROOT_USERNAME=admin \
             -e MONGO_INITDB_ROOT_PASSWORD=mot_de_sel_passe \
-            mongo_server
+            mongo_server &
 
 sleep 10
 
@@ -27,6 +29,8 @@ mongoimport --host=172.50.0.2:27017 \
 
 
 # for the client
+docker pull mongodb/mongo-cxx-driver:latest
+
 docker build -t mongo_client mongo_client
 
 docker run --net POC_MongoDB \
