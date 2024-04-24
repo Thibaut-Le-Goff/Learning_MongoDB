@@ -1,4 +1,6 @@
+//#include "../mongo-c-driver-1.25.4/src/libbson/src/bson/bson.h"
 #include <bson/bson.h>
+//#include "../mongo-c-driver-1.25.4/src/libmongoc/src/mongoc/mongoc.h"
 #include <mongoc/mongoc.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -32,7 +34,10 @@ void filtrage_et_projection(mongoc_client_t *client) {
     mongoc_cursor_t *cursor = mongoc_collection_find_with_opts (collection, query, opts, NULL);
 
     const bson_t *doc = NULL;
+    char *str = NULL;
     while (mongoc_cursor_next(cursor, &doc)) {
+    //while (*str != '\0') {
+        //mongoc_cursor_error(cursor, NULL);
         /*
         if (doc != NULL) 
         {
@@ -41,7 +46,7 @@ void filtrage_et_projection(mongoc_client_t *client) {
             bson_free(str);
         }*/
         
-        char *str = bson_as_canonical_extended_json(doc, NULL);
+        str = bson_as_canonical_extended_json(doc, NULL);
         printf("%s\n", str);
         bson_free(str);
     }

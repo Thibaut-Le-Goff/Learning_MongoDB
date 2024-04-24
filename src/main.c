@@ -1,4 +1,6 @@
+//#include "../mongo-c-driver-1.25.4/src/libbson/src/bson/bson.h"
 #include <bson/bson.h>
+//#include "../mongo-c-driver-1.25.4/src/libmongoc/src/mongoc/mongoc.h"
 #include <mongoc/mongoc.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -18,7 +20,6 @@ int main() {
     // Initialize the MongoDB C Driver.
     mongoc_init();
 
-    //client = mongoc_client_new("mongodb://127.0.0.1:27017");
     //mongoc_client_t *client = mongoc_client_new("mongodb://172.17.0.2:27017");
     mongoc_client_t *client =  mongoc_client_new ("mongodb://admin:mot_de_sel_passe@172.17.0.2:27017/?authSource=admin");
     
@@ -40,7 +41,6 @@ int main() {
 
     // Interrogez vos données avec MongoDB
     filtrage_et_projection(client);
-
     
 
     // Perform cleanup.
