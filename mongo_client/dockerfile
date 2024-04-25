@@ -5,17 +5,20 @@ WORKDIR /build
 RUN microdnf upgrade -y && \
     microdnf install -y gcc && \
     microdnf install -y git && \
+    microdnf install -y vim && \
     git clone https://github.com/Thibaut-Le-Goff/Vim_Config && \
+    git clone https://github.com/Thibaut-Le-Goff/Learning_MongoDB && \
     chmod +x Vim_Config/install_vim_config.sh && \
     ./Vim_Config/install_vim_config.sh 
-# && \    git clone https://github.com/Thibaut-Le-Goff/Learning_MongoDB
 
-ADD /src /build/src
-ADD /src /build/include
+# ADD /src /build/src
+# ADD /include /build/include
  
-ADD /makefile /build/makefile
-ADD /run.sh /build/run.sh
+# ADD /restaurants.json /build/restaurants.json
 
-RUN chmod +x run.sh
+# ADD /makefile /build/makefile
+# ADD /run.sh /build/run.sh
+
+# RUN chmod +x run.sh
 
 CMD ["bash"]
